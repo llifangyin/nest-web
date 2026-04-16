@@ -1,7 +1,7 @@
 import { request } from '@umijs/max';
 
 export interface LoginParams {
-  email: string;
+  name: string;
   password: string;
 }
 

@@ -67,10 +67,11 @@ export const layout = ({
           ),
         }
       : undefined,
-    // 路由守卫：未登录且不在登录页，跳转 /login
+    // 路由守卫：直接读 cookie，避免闭包捕获旧 initialState 导致登录后立刻被踢回
     onPageChange: () => {
       const { pathname } = history.location;
-      if (!initialState?.currentUser && pathname !== '/login') {
+      const token = Cookies.get(TOKEN_KEY);
+      if (!token && pathname !== '/login') {
         history.push('/login');
       }
     },
