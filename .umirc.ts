@@ -21,6 +21,11 @@ export default defineConfig({
   },
   routes: [
     {
+      path: '/login',
+      component: './Login',
+      layout: false, // 登录页不需要侧边栏 layout
+    },
+    {
       path: '/',
       redirect: '/user',
     },
