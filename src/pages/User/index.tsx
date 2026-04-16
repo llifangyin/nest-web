@@ -42,7 +42,7 @@ const handleAdd = async (fields: {
 /**
  * 更新用户
  */
-const handleUpdate = async (id: number, fields: Partial<User>) => {
+const handleUpdate = async (id: string, fields: Partial<User>) => {
   const hide = message.loading('正在更新');
   try {
     await update(id, fields);
@@ -83,7 +83,7 @@ const UserList: React.FC = () => {
   const columns: ProColumns<User>[] = [
     {
       title: 'ID',
-      dataIndex: 'id',
+      dataIndex: '_id',
       width: 80,
       search: false,
     },
@@ -125,7 +125,7 @@ const UserList: React.FC = () => {
           <Popconfirm
             title="确认删除该用户？"
             onConfirm={async () => {
-              const success = await handleRemove(record.id!);
+              const success = await handleRemove(record._id!);
               if (success) actionRef.current?.reload();
             }}
           >
@@ -184,7 +184,7 @@ const UserList: React.FC = () => {
           setCurrentRow({});
         }}
         onSubmit={async (values) => {
-          const success = await handleUpdate(currentRow.id!, values);
+          const success = await handleUpdate(currentRow._id!, values);
           if (success) {
             setUpdateModalVisible(false);
             setCurrentRow({});

@@ -2,7 +2,7 @@
 // 该文件由 OneAPI 自动生成，请勿手动修改！
 
 export interface User {
-  id?: number;
+  _id?: string;
   name: string;
   email: string;
   password?: string;

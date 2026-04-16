@@ -9,13 +9,13 @@ export function findAll(params?: { name?: string; email?: string }) {
   });
 }
 /** 获取单个用户 GET /users/:id */
-export function findOne(id: number) {
+export function findOne(id: string) {
   return request<User>(`/proxy/users/${id}`, {
     method: 'GET',
   });
 }
 /** 新建用户 POST /users */
-export function create(data: Omit<User, 'id' | 'createdAt'>) {
+export function create(data: Omit<User, '_id' | 'createdAt'>) {
   return request<User>('/proxy/users', {
     method: 'POST',
     data,
@@ -23,8 +23,8 @@ export function create(data: Omit<User, 'id' | 'createdAt'>) {
 }
 /** 更新用户 PUT /users/:id */
 export function update(
-  id: number,
-  data: Partial<Omit<User, 'id' | 'createdAt'>>,
+  id: string,
+  data: Partial<Omit<User, '_id' | 'createdAt'>>,
 ) {
   return request<User>(`/proxy/users/${id}`, {
     method: 'PUT',
@@ -32,7 +32,7 @@ export function update(
   });
 }
 /** 删除用户 DELETE /users/:id */
-export function remove(id: number) {
+export function remove(id: string) {
   return request(`/proxy/users/${id}`, {
     method: 'DELETE',
   });
