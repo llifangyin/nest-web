@@ -1,10 +1,16 @@
 import {
+  downloadExport,
+  getExportStatus,
+  triggerExport,
+} from '@/services/export/ExportController';
+import { User } from '@/services/users/typings';
+import {
   create,
   findAll,
   remove,
   update,
 } from '@/services/users/UserController';
-import { User } from '@/services/users/typings';
+import { DownloadOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
@@ -78,7 +84,45 @@ const UserList: React.FC = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [currentRow, setCurrentRow] = useState<Partial<User>>({});
   const [drawerRow, setDrawerRow] = useState<User | undefined>(undefined);
+  const [exporting, setExporting] = useState(false);
   const actionRef = useRef<ActionType>();
+
+  /** 异步导出：触发 → 轮询 → 下载 */
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { taskId } = await triggerExport();
+      message.info('导出任务已创建，正在处理...');
+
+      const timer = setInterval(async () => {
+        try {
+          const task = await getExportStatus(taskId);
+          if (task.status === 'done') {
+            clearInterval(timer);
+            setExporting(false);
+            message.success('导出成功，即将下载');
+            downloadExport(taskId);
+          } else if (task.status === 'failed') {
+            clearInterval(timer);
+            setExporting(false);
+            message.error(`导出失败：${task.errorMsg}`);
+          }
+        } catch {
+          clearInterval(timer);
+          setExporting(false);
+        }
+      }, 2000);
+
+      // 60 秒超时保护
+      setTimeout(() => {
+        clearInterval(timer);
+        setExporting(false);
+      }, 60000);
+    } catch {
+      setExporting(false);
+      message.error('触发导出失败，请重试');
+    }
+  };
 
   const columns: ProColumns<User>[] = [
     {
@@ -144,6 +188,14 @@ const UserList: React.FC = () => {
         rowKey="id"
         search={{ labelWidth: 80 }}
         toolBarRender={() => [
+          <Button
+            key="export"
+            icon={<DownloadOutlined />}
+            loading={exporting}
+            onClick={handleExport}
+          >
+            导出 CSV
+          </Button>,
           <Button
             key="add"
             type="primary"
