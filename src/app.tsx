@@ -94,6 +94,16 @@ export const request: RequestConfig = {
   ],
   responseInterceptors: [
     (response: any) => {
+      // 统一响应格式解包：{ code, data, message } → 只保留 data
+      const resData = response?.data;
+      if (
+        resData &&
+        typeof resData === 'object' &&
+        'code' in resData &&
+        'data' in resData
+      ) {
+        response.data = resData.data;
+      }
       if (response?.status === 401) {
         Cookies.remove(TOKEN_KEY);
         history.push('/login');
