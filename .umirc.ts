@@ -49,6 +49,11 @@ export default defineConfig({
       path: '/user',
       component: './User',
     },
+    {
+      name: '商品管理',
+      path: '/product',
+      component: './Product',
+    },
   ],
   npmClient: 'npm',
 });
