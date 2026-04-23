@@ -36,6 +36,7 @@ pipeline {
                       --name ${IMAGE_NAME} \
                       -p ${HOST_PORT}:${CONTAINER_PORT} \
                       ${IMAGE_NAME}:${BUILD_NUMBER}
+                    docker network connect nest-demo_nest-network ${IMAGE_NAME} || true
                 """
             }
         }
