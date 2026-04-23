@@ -40,6 +40,15 @@ export default function LoginPage() {
           boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
         }}
       >
+        {/* logo图标 */}
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <img
+            src="/img/lightweight.svg"
+            alt="logo"
+            style={{ width: 80, height: 80 }}
+          />
+        </div>
+
         <Title level={3} style={{ textAlign: 'center', marginBottom: 32 }}>
           nest-web 登录
         </Title>
